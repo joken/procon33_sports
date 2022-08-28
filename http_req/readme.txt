@@ -1,7 +1,7 @@
 <usage>
 $ python3 http_req.py [arg1] [arg2] [arg3] ...
 
-・arg1は 'm' か 'p' か 'c' か 'a' を指定
+・arg1は 'm' か 'p' か 'c' か 'a' 's' を指定
 ｜-'m'で試合情報(GET /match)を取得できる．
 ｜-'p'で問題情報(GET /problem)を取得できる．
 ｜-'c'では分割数を指定し，ファイル名を取得するモードを指定する．
