@@ -85,6 +85,14 @@ else:
         print("problem_id   :" + str(response.json()['problem_id']))
         print("answers      :" + str(response.json()['answers']))
         print("accepted_at  :" + str(response.json()['accepted_at'])+"\n")
+
+    #STFTによるスペクトログラム生成
+    elif(sys.argv[1] == "s"):
+        if(argc < 3):
+            print("arg error: argments is needed more!")
+            exit( 1 )
+        print("now analyzing...")
+        funcs.AnalyzeSpec(sys.argv[2])
     else:
         print("arg error: The first arg is invalid!")
         exit( 1 )
