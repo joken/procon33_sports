@@ -5,6 +5,8 @@ import librosa
 import librosa.display
 from numpy import hamming
 import numpy as np
+import time
+
 
 def AutoGetFiles(n,chunk_list,token):
     for i in range(n):
@@ -25,6 +27,31 @@ def status_code_check(response):
         else:
             print("Perhaps, Server is Down")
             exit( 1 )
+
+def AutomaticGetting(domain,token,isAutoGetFiles,init_chunk,interval):
+    chunk_list = []
+    request_url_chunk = domain + "/problem/chunks?n=" + str(init_chunk)
+    # POSTリクエスト
+    print("send request")
+    response = requests.post(request_url_chunk,headers={"procon-token": token})
+    #ステータスコードチェッカー
+    if(response.status_code != 200):
+        # dos判定の回避
+        time.sleep(interval)
+        print("status code is ["+str(response.status_code)+"] Now Retrying...")
+        AutomaticGetting(domain,token,isAutoGetFiles,init_chunk,interval)
+    else:
+        # アクセスが成功した場合
+        print("chunks:")
+        # ファイル名の格納
+        for i in range(init_chunk):
+            chunk_list.append(str(response.json()['chunks'][i]))
+            print(response.json()['chunks'][i])
+        print()
+
+        #音声ファイルの自動取得
+        if(isAutoGetFiles):
+            AutoGetFiles(init_chunk,chunk_list,token)
 
 def FFT(x):
     N = x.shape[0]

@@ -3,16 +3,26 @@ from multiprocessing.spawn import import_main_path
 from operator import truediv
 from signal import valid_signals
 import requests
+from urllib3.util import Retry
+from requests.adapters import HTTPAdapter
 import sys
 import http_req_lib as funcs
+import configparser
+
+# ConfigParserのインスタンス（特定の機能を持った変数）を取得
+config = configparser.ConfigParser()
+# config.iniを読み出し
+config.read("config.ini")
 
 #define
-token = "92c099e3eb98b70cf60e4bc63b5f54fac4c3b51da4f57cbf1b7668c0f8d625fa"
-domain = "https://procon33-practice.kosen.work"
+token = str(config["http_req"]["token"])
+domain = str(config["http_req"]["domain"])
 argc = len(sys.argv)
 cmd = sys.argv[0]
-isAutoGetFiles = True
-
+isAutoGetFiles = bool(config["http_req"]["isAutoGetFiles"])
+isEnableAutomaticGetting = bool(config["http_req"]["isEnableAutomaticGetting"])
+interval = float(config["http_req"]["interval"])
+init_chunk = int(config["http_req"]["init_chunk"])
 
 if(argc < 2):
     print("Usage: ", cmd, "argments is needed more!")
@@ -47,21 +57,27 @@ else:
         if(argc < 3):
             print("arg error: Please specify the number of divisions!\n")
             exit( 1 )
-        request_url_chunk = domain + "/problem/chunks?n=" + sys.argv[2]
-        # POSTリクエスト
-        response = requests.post(request_url_chunk,headers={"procon-token": token})
-        #ステータスコードチェッカー
-        funcs.status_code_check(response)
-        print("chunks:")
-        # ファイル名の格納
-        for i in range(int(sys.argv[2])):
-            chunk_list.append(str(response.json()['chunks'][i]))
-            print(response.json()['chunks'][i])
-        print()
+        #チャンク数かモード指定か
+        if(sys.argv[2] == 'a'):
+            #自動取得モード
+            funcs.AutomaticGetting(domain,token,isAutoGetFiles,init_chunk,interval)
 
-        #音声ファイルの自動取得
-        if(isAutoGetFiles):
-            funcs.AutoGetFiles(int(sys.argv[2]),chunk_list,token)
+        else:
+            request_url_chunk = domain + "/problem/chunks?n=" + sys.argv[2]
+            # POSTリクエスト
+            response = requests.post(request_url_chunk,headers={"procon-token": token})
+            #ステータスコードチェッカー
+            funcs.status_code_check(response)
+            print("chunks:")
+            # ファイル名の格納
+            for i in range(int(sys.argv[2])):
+                chunk_list.append(str(response.json()['chunks'][i]))
+                print(response.json()['chunks'][i])
+            print()
+
+            #音声ファイルの自動取得
+            if(isAutoGetFiles):
+                funcs.AutoGetFiles(int(sys.argv[2]),chunk_list,token)
 
     #回答POST
     elif(sys.argv[1] == "a"):
