@@ -19,9 +19,11 @@ token = str(config["http_req"]["token"])
 domain = str(config["http_req"]["domain"])
 argc = len(sys.argv)
 cmd = sys.argv[0]
-isAutoGetFiles = bool(config["http_req"]["isAutoGetFiles"])
-isEnableAutomaticGetting = bool(config["http_req"]["isEnableAutomaticGetting"])
-interval = float(config["http_req"]["interval"])
+isAutoGetFiles = config["http_req"].getboolean("isAutoGetFiles")
+isEnableAutomaticAnswerPost = config["http_req"].getboolean("isEnableAutomaticAnswerPost")
+isEnableAutomaticTransition = config["http_req"].getboolean("isEnableAutomaticTransition")
+interval_AutomaticGetting = float(config["http_req"]["interval_AutomaticGetting"])
+interval_AutomaticAnswerPost = float(config["http_req"]["interval_AutomaticAnswerPost"])
 init_chunk = int(config["http_req"]["init_chunk"])
 
 if(argc < 2):
@@ -60,7 +62,7 @@ else:
         #チャンク数かモード指定か
         if(sys.argv[2] == 'a'):
             #自動取得モード
-            funcs.AutomaticGetting(domain,token,isAutoGetFiles,init_chunk,interval)
+            funcs.AutomaticGetting(domain,token,isAutoGetFiles,init_chunk,interval_AutomaticGetting,isEnableAutomaticTransition,interval_AutomaticAnswerPost)
 
         else:
             request_url_chunk = domain + "/problem/chunks?n=" + sys.argv[2]
@@ -78,29 +80,36 @@ else:
             #音声ファイルの自動取得
             if(isAutoGetFiles):
                 funcs.AutoGetFiles(int(sys.argv[2]),chunk_list,token)
+                if(isEnableAutomaticTransition):
+                    funcs.AutomaticAnswerPost(domain,token,interval_AutomaticAnswerPost)
 
     #回答POST
     elif(sys.argv[1] == "a"):
-        print(">> Please enter in the following format.")
-        print("[problem_id] [answer_picture_id] [answer_picture_id] ... (3 <= num <= 20) ")
-        answer = input("answer >>")
-        ans_array = list(map(str, answer.strip().split()))
-        ans_array_len = len(ans_array)
-        if(ans_array_len < 2):
-            print("arg error: argments is needed more!")
-            exit( 1 )
+        #自動回答POSTを行うか
+        if(isEnableAutomaticAnswerPost):
+            funcs.AutomaticAnswerPost(domain,token,interval_AutomaticAnswerPost)
         else:
-            #回答の答え（answer）部分のみの配列
-            ans_picture = ans_array[1:ans_array_len]
-        #リクエストボディ作成
-        request_body = {"problem_id": ans_array[0],"answers": ans_picture}
-        print(request_body)
-        response = requests.post(domain + "/problem",json=request_body,headers={"Content-Type": "application/json", "procon-token": token})
-        #ステータスコードチェッカー
-        funcs.status_code_check(response)
-        print("problem_id   :" + str(response.json()['problem_id']))
-        print("answers      :" + str(response.json()['answers']))
-        print("accepted_at  :" + str(response.json()['accepted_at'])+"\n")
+            print(">> Please enter in the following format.")
+            print("[problem_id] [answer_picture_id] [answer_picture_id] ... (3 <= num <= 20) ")
+            answer = input("answer >>")
+            ans_array = list(map(str, answer.strip().split()))
+            ans_array_len = len(ans_array)
+            if(ans_array_len < 2):
+                print("arg error: argments is needed more!")
+                exit( 1 )
+            else:
+                #回答の答え（answer）部分のみの配列
+                ans_picture = ans_array[1:ans_array_len]
+            #リクエストボディ作成
+            request_body = {"problem_id": ans_array[0],"answers": ans_picture}
+            print(request_body)
+            response = requests.post(domain + "/problem",json=request_body,headers={"Content-Type": "application/json", "procon-token": token})
+            #ステータスコードチェッカー
+            funcs.status_code_check(response)
+            print("problem_id   :" + str(response.json()['problem_id']))
+            print("answers      :" + str(response.json()['answers']))
+            print("accepted_at  :" + str(response.json()['accepted_at']))
+            print("post request is successful!!!"+"\n")
 
     #STFTによるスペクトログラム生成
     elif(sys.argv[1] == "s"):
