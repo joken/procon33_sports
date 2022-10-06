@@ -5,4 +5,4 @@
 保存用のバックアップファイルをクリーンアップする
 
 ## 実行
-`python main.py <match> <stage>`
+`python main.py <match> <stage> -s`

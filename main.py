@@ -37,13 +37,14 @@ def main():
         Status = backup.statusLoad(match)
     toiPathes = backup.toiPathesLoad(match, stage)
     analyzed_data = backup.analyzedLoad(match, stage)
-    similarity_data = backup.simirarityLoad(match, stage)
+    similarity_data = backup.similarityLoad(match, stage)
     answer_cards = backup.answerLoad(match, stage)
 
     if start <= 0:
         # request
         # req.ClearChunkPathList()
         toiPathes = req.AutomaticRequestChunksPath(3)
+        backup.toiPathesWrite(match,stage,toiPathes)
 
     if start <= 1:
         # analyze
@@ -51,16 +52,19 @@ def main():
         for toi in toiPathes:
             analyzed_data["seg"+str(num)] = analyze.analyze(match, stage, num, toi)
             num += 1
+        backup.analyzedWrite(match,stage,analyzed_data)
 
     if start <= 2:
         # comparison
         for key in analyzed_data.keys():
             similarity_data = comparison.comparison(match, stage, analyzed_data[key]) # ?add similarity_data
-    
+        backup.similarityWrite(match,stage,similarity_data)
+
     if start <= 3:
         # chooser
         answer_cards = chooser.chooser(match, stage, similarity_data, answer_number)
-    
+        backup.answerWrite(match,stage,answer_cards)
+
     if start <= 4:
         # send
         print("Hello")

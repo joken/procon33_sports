@@ -42,7 +42,7 @@ def toiPathesWrite(match, stage, toiPathes):
     with open(backupStatus, "rt") as file:
         d_update = json.load(file, object_pairs_hook=OrderedDict)
 
-    d_update[match][stage]["toi"] = toiPathes
+    d_update[match][stage]= toiPathes
     with open(backupStatus, "w+") as file:
         json.dump(d_update, file, indent=4)
 
@@ -50,7 +50,7 @@ def toiPathesLoad(match, stage):
     d_update
     with open(backupStatus, "rt") as file:
         d_update = json.load(file, object_pairs_hook=OrderedDict)
-    return d_update[match][stage]["toi"]
+    return d_update[match][stage]
 
 # analyzed data
 def analyzedWrite(match, stage, analyzed_data):
@@ -69,16 +69,16 @@ def analyzedLoad(match, stage):
     return d_update[match][stage]
 
 # similarity data
-def simirarityWrite(match, stage, simirarity_data):
+def similarityWrite(match, stage, similarity_data):
     d_update
     with open(backupSimilarity, "rt") as file:
         d_update = json.load(file, object_pairs_hook=OrderedDict)
 
-    d_update[match][stage] = simirarity_data
+    d_update[match][stage] = similarity_data
     with open(backupSimilarity, "w+") as file:
         json.dump(d_update, file, indent=4)
 
-def simirarityLoad(match, stage):
+def similarityLoad(match, stage):
     d_update
     with open(backupSimilarity, "rt") as file:
         d_update = json.load(file, object_pairs_hook=OrderedDict)
