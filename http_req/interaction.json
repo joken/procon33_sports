@@ -3,5 +3,7 @@
         "01",
         "02"
     ],
-    "isEnableAnswerPostMode": false
+    "isEnableAnswerPostMode": false,
+    "chunk_list": [],
+    "path_list": []
 }
