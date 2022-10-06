@@ -23,5 +23,5 @@ def select(match, stage, similarity_data, ans_numbers):
 
 # -----
 if __name__ == '__main__':
-    similarity_data = dict
+    similarity_data = dict()
     select("sample", 0, similarity_data, 20)
