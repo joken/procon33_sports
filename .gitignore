@@ -2,6 +2,9 @@
 # 元音声ファイル
 # origin_data/
 
+# GETした問題ファイル
+wave_files/
+
 
 # 個人開発環境
 developper/

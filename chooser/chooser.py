@@ -1,15 +1,14 @@
-from .. import main
 
 
-def buckup(match, stage, similarity_dict, ans_cards):
-    select_buckup = "{}/buckup/{}".format(main.rootdir, "{}{}.json".format(match, stage))
+# def buckup(match, stage, similarity_dict, ans_cards):
+#     select_buckup = "{}/buckup/{}".format(main.rootdir, "{}{}.json".format(match, stage))
     
-    # with open(select_buckup, "w+", encoding="utf-8") as f:
+#     # with open(select_buckup, "w+", encoding="utf-8") as f:
 
 
 
 
-def select(match, stage, similarity_data, ans_numbers):
+def chooser(match, stage, similarity_data, ans_numbers):
     similarity_dict = dict()
     similarity_dict = similarity_data
 
@@ -17,7 +16,7 @@ def select(match, stage, similarity_data, ans_numbers):
 
     ans_cards = [sim[0] for sim in similarity_list][:ans_numbers]
 
-    buckup(match, stage, similarity_dict, ans_cards)
+    # buckup(match, stage, similarity_dict, ans_cards)
     return ans_cards
 
 

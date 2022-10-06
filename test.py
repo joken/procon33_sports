@@ -23,9 +23,6 @@ match = args.match
 stage = args.stage
 start = args.jamp
 
-answer_number = 0
-
-
 
 def main():
     toiPathes = []
@@ -33,30 +30,8 @@ def main():
     similarity_data = dict()
     answer_cards = list()
 
-    if start <= 0:
-        # request
-        req.ClearChunkPathList()
-        toiPathes = req.AutomaticRequestChunksPath(3)
-
-    if start <= 1:
-        # analyze
-        num = 0
-        for toi in toiPathes:
-            analyzed_data["seg"+str(num)] = analyze.analyze(match, stage, num, toi)
-            num += 1
-
-    if start <= 2:
-        # comparison
-        for key in analyzed_data.keys():
-            similarity_data = comparison.comparison(match, stage, analyzed_data[key]) # ?add similarity_data
-    
-    if start <= 3:
-        # chooser
-        answer_cards = chooser.chooser(match, stage, similarity_data, answer_number)
-    
-    if start <= 4:
-        # send
-        print("Hello")
+    # print(req.ClearChunkPathList()) OK
+    print(req.AutomaticRequestChunksPath(3))
 
 if __name__ == '__main__':
     main()

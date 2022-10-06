@@ -1,8 +1,7 @@
 import json
-from .. import main
 
-def buckup(match, stage, analyzed_data, similarity_data):
-    print()
+# def buckup(match, stage, analyzed_data, similarity_data):
+#     print()
 
 def comparison(match, stage, analyzed_data):
     yomi_data = dict()
@@ -20,7 +19,7 @@ def comparison(match, stage, analyzed_data):
 
         similarity_data[name] = similarity
     
-    buckup(match, stage, analyzed_data, similarity_data)
+    # buckup(match, stage, analyzed_data, similarity_data)
     return similarity_data
 
 

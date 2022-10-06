@@ -6,6 +6,7 @@ cmd = sys.argv[0]
 
 # $ python3 test.py r と入力した場合
 if(sys.argv[1] == 'r'):
+    funcs.ClearChunkPathList()
     a = funcs.AutomaticRequestChunksPath(sys.argv[2])
 # $ python3 test.py a と入力した場合
 elif(sys.argv[1] == 'a'):

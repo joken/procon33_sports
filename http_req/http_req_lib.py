@@ -36,7 +36,8 @@ def AutomaticRequestChunksPath(init_chunk):
     request_url_chunk = domain + "/problem/chunks?n=" + str(init_chunk)
     # POSTリクエスト
     print(">",end='',flush=True)
-    response = requests.post(request_url_chunk,headers={"procon-token": token})
+    # response = requests.post(request_url_chunk,headers={"procon-token": token})
+    response = requests.get(domain + "/problem?token="+token)
     #ステータスコードチェッカー
     if(response.status_code != 200):
         # dos判定の回避
@@ -50,7 +51,7 @@ def AutomaticRequestChunksPath(init_chunk):
         print("chunks:")
         # ファイル名の格納
         for i in range(init_chunk):
-            chunk_list.append(str(response.json()['chunks'][i]))
+            chunk_list.append(str(response.json()['chunks'][str(i)]))
             print(response.json()['chunks'][i])
         print()
 
