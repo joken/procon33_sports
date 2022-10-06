@@ -11,3 +11,6 @@ developper/
 
 # 出力データのバックアップ
 buckup/**
+
+# 読みデータの解析後ファイル
+yomi.json

@@ -3,6 +3,9 @@
 ## 開始準備
 `python backup.py`
 保存用のバックアップファイルをクリーンアップする
+`python analyzed_yomi.py`
+読みデータの解析を行い`yomi.json`に格納する
+(`yomi.json`データ容量が大きいためgithubには元の読みデータのみをあげている)
 
 ## 実行
 `python main.py <match> <stage> -s`
