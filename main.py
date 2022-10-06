@@ -7,6 +7,7 @@ from analyze import analyze
 from comparison import comparison
 from chooser import chooser
 from http_req import http_req_lib as req
+import backup
 
 parser = argparse.ArgumentParser(description='解答用プログラム')
 parser.add_argument('match', help='試合番号')
@@ -26,16 +27,15 @@ start = args.jamp
 answer_number = 0
 
 
-
 def main():
-    toiPathes = []
-    analyzed_data = dict()
-    similarity_data = dict()
-    answer_cards = list()
+    toiPathes = backup.toiPathesLoad(match, stage)
+    analyzed_data = backup.analyzedLoad(match, stage)
+    similarity_data = backup.simirarityLoad(match, stage)
+    answer_cards = backup.answerLoad(match, stage)
 
     if start <= 0:
         # request
-        req.ClearChunkPathList()
+        # req.ClearChunkPathList()
         toiPathes = req.AutomaticRequestChunksPath(3)
 
     if start <= 1:
