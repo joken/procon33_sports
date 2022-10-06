@@ -1,11 +1,14 @@
 import json
 
+yomiPath = "/home/gisuperu/Desktop/procon33_sports/yomi.json"
+# yomiPath= "./yomi.json"
+
 # def buckup(match, stage, analyzed_data, similarity_data):
 #     print()
 
 def comparison(match, stage, analyzed_data):
     yomi_data = dict()
-    with open("yomi.json", "r") as f:
+    with open(yomiPath, "r") as f:
         yomi_data = json.load(f)
 
     yomi_names = yomi_data.keys()
