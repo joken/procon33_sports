@@ -19,6 +19,23 @@ def cleanUP():
         json.dump(dict({}), file, indent=4)
 
 
+# Status
+def statusWrite(match, status):
+    d_update
+    with open(backupStatus, "rt") as file:
+        d_update = json.load(file, object_pairs_hook=OrderedDict)
+
+    d_update[match]["status"] = status
+    with open(backupStatus, "w+") as file:
+        json.dump(d_update, file, indent=4)
+
+def statusLoad(match):
+    d_update
+    with open(backupStatus, "rt") as file:
+        d_update = json.load(file, object_pairs_hook=OrderedDict)
+    return d_update[match]["status"]
+
+
 # toiPahtes
 def toiPathesWrite(match, stage, toiPathes):
     d_update

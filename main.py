@@ -12,7 +12,8 @@ import backup
 parser = argparse.ArgumentParser(description='解答用プログラム')
 parser.add_argument('match', help='試合番号')
 parser.add_argument('stage', help='問題番号')
-parser.add_argument('-j', '--jamp', default=0, help='プロセス開始位置')
+parser.add_argument('-j', '--jump', default=0, help='プロセス開始位置')
+parser.add_argument('-s', '--start', action='store_true', help='GETで問題情報を取得')
 
 
 # rootdir = __file__
@@ -22,12 +23,18 @@ args = parser.parse_args()
 
 match = args.match
 stage = args.stage
-start = args.jamp
+start = args.jump
+isbegin = args.start
 
 answer_number = 0
 
 
 def main():
+    if isbegin:
+        Status = req.AnalyzeSpec() # must make function
+        backup.statusWrite(match, Status)
+    else:
+        Status = backup.statusLoad(match)
     toiPathes = backup.toiPathesLoad(match, stage)
     analyzed_data = backup.analyzedLoad(match, stage)
     similarity_data = backup.simirarityLoad(match, stage)
