@@ -1,3 +1,4 @@
+from code import interact
 import requests
 import numpy as np
 import matplotlib.pyplot as plt
@@ -5,6 +6,9 @@ import librosa
 import librosa.display
 from numpy import hamming
 import numpy as np
+import time
+import json
+
 
 def AutoGetFiles(n,chunk_list,token):
     for i in range(n):
@@ -16,6 +20,7 @@ def AutoGetFiles(n,chunk_list,token):
         """        with open("file_test","w") as t:
             t.write(str(vars(response)))"""
         print("status: " + str(response.status_code))
+    print()
 
 def status_code_check(response):
     if(response.status_code != 200):
@@ -25,6 +30,73 @@ def status_code_check(response):
         else:
             print("Perhaps, Server is Down")
             exit( 1 )
+
+def AutomaticGetting(domain,token,isAutoGetFiles,init_chunk,interval,isEnableAutomaticTransition,interval_AutomaticAnswerPost):
+    chunk_list = []
+    request_url_chunk = domain + "/problem/chunks?n=" + str(init_chunk)
+    # POSTリクエスト
+    print(">",end='',flush=True)
+    response = requests.post(request_url_chunk,headers={"procon-token": token})
+    #ステータスコードチェッカー
+    if(response.status_code != 200):
+        # dos判定の回避
+        time.sleep(interval)
+        if(response.status_code == 400):print(".",end="",flush=True)
+        else:print("_",end='',flush=True)
+        AutomaticGetting(domain,token,isAutoGetFiles,init_chunk,interval,isEnableAutomaticTransition,interval_AutomaticAnswerPost)
+    else:
+        print("!")
+        # アクセスが成功した場合
+        print("chunks:")
+        # ファイル名の格納
+        for i in range(init_chunk):
+            chunk_list.append(str(response.json()['chunks'][i]))
+            print(response.json()['chunks'][i])
+        print()
+
+        #音声ファイルの自動取得
+        if(isAutoGetFiles):
+            AutoGetFiles(init_chunk,chunk_list,token)
+            if(isEnableAutomaticTransition):
+                AutomaticAnswerPost(domain,token,interval_AutomaticAnswerPost)
+
+def AutomaticAnswerPost(domain,token,interval):
+    json_op = open('interaction.json', 'r')
+    interaction = json.load(json_op)
+    if(interaction["isEnableAnswerPostMode"]):
+        print("!")
+        # --- problemの取得用request --- 
+        response = requests.get(domain + "/problem?token="+token)
+        #ステータスコードチェッカー
+        status_code_check(response)
+        ans_array = interaction["answer"]
+        ans_array_len = len(ans_array)
+        if(ans_array_len < 2):
+            print("arg error: argments is needed more!")
+            exit( 1 )
+        #リクエストボディ作成
+        request_body = {"problem_id": str(response.json()['id']),"answers": ans_array}
+        print(request_body)
+
+        # --- post用request --- 
+        response = requests.post(domain + "/problem",json=request_body,headers={"Content-Type": "application/json", "procon-token": token})
+        #ステータスコードチェッカー
+        status_code_check(response)
+        print("problem_id   :" + str(response.json()['problem_id']))
+        print("answers      :" + str(response.json()['answers']))
+        print("accepted_at  :" + str(response.json()['accepted_at']))
+        print("post request is successful!!!"+"\n")
+
+        #jsonのフラグをfalseにする！！！！
+        interaction["isEnableAnswerPostMode"] = False
+
+        output_json = open('interaction.json', 'w')
+        json.dump(interaction, output_json, indent=4)
+
+    else:
+        print("-",end="",flush=True)
+        time.sleep(interval)
+        AutomaticAnswerPost(domain,token,interval)
 
 def FFT(x):
     N = x.shape[0]
@@ -78,3 +150,6 @@ def AnalyzeSpec(wave_file):
     spec_db = librosa.amplitude_to_db(np.abs(spec))
     librosa.display.specshow(spec_db, y_axis="log")
     plt.show()
+
+if(__name__ == "__main__"):
+    print("This source code is for the library of functions only!")

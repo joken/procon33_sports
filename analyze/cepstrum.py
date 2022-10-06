@@ -42,6 +42,8 @@ def trans(wavfile, outfile):
     spec_db_amp = norm(spec_db, 2e-5)                     # 音声スペクトルの振幅成分を計算
     ceps_db_low_amp = norm(ceps_db_low, 2e-5)             # ローパスリフター後のスペクトル包絡の振幅成分を計算
 
+
+
     # ここからグラフ描画
     # フォントの種類とサイズを設定する。
     plt.rcParams['font.size'] = 14
