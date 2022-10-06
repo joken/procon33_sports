@@ -1,6 +1,9 @@
 import sys
 import os
 from analyze import cepstrum
+from analyze import analyze
+from comparison import comparison
+from chooser import select
 from http_req import http_req_lib
 
 # rootdir = __file__
@@ -15,7 +18,7 @@ def main():
 
     # comparison
 
-    # select
+    # chooser
 
     # send
     print("Hello")

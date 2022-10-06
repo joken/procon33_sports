@@ -81,7 +81,7 @@ def main():
 
     # for i in range(1, 45):
     #     size_list["J"+str(i).zfill(2)] = cepstrum.trans(filename1.format("J"+str(i).zfill(2)), outname1.format("J"+str(i).zfill(2)))
-    #     size_list["E"+str(i).zfill(2)] = cepstrum.trans(filename1.format("E"+str(i).zfill(2)), outname1.format("J"+str(i).zfill(2)))
+    #     size_list["E"+str(i).zfill(2)] = cepstrum.trans(filename1.format("E"+str(i).zfill(2)), outname1.format("E"+str(i).zfill(2)))
     #     # analyze("E"+str(i))
     
     # with open("./size_list2.csv", "w+") as o_file:
