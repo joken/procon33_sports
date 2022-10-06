@@ -21,9 +21,9 @@ def cleanUP():
 
 # Status
 def statusWrite(match, status):
-    d_update
+    d_update = dict()
     with open(backupStatus, "rt") as file:
-        d_update = json.load(file, object_pairs_hook=OrderedDict)
+        d_update = json.load(file)
 
     d_update[match]["status"] = status
     with open(backupStatus, "w+") as file:
@@ -32,87 +32,87 @@ def statusWrite(match, status):
 def statusLoad(match):
     d_update
     with open(backupStatus, "rt") as file:
-        d_update = json.load(file, object_pairs_hook=OrderedDict)
+        d_update = json.load(file)
     return d_update[match]["status"]
 
 # probrem info
 def infoWrite(match, stage, probrem_info):
-    d_update
+    d_update = dict()
     with open(backupStatus, "rt") as file:
-        d_update = json.load(file, object_pairs_hook=OrderedDict)
+        d_update = json.load(file)
 
     d_update[match][stage]["info"]= probrem_info
     with open(backupStatus, "w+") as file:
         json.dump(d_update, file, indent=4)
 
 def infoLoad(match, stage):
-    d_update
+    d_update = dict()
     with open(backupStatus, "rt") as file:
-        d_update = json.load(file, object_pairs_hook=OrderedDict)
+        d_update = json.load(file)
     return d_update[match][stage]["info"]
 
 # toiPahtes
 def toiPathesWrite(match, stage, toiPathes):
-    d_update
+    d_update = dict()
     with open(backupStatus, "rt") as file:
-        d_update = json.load(file, object_pairs_hook=OrderedDict)
+        d_update = json.load(file)
 
     d_update[match][stage]["path"]= toiPathes
     with open(backupStatus, "w+") as file:
         json.dump(d_update, file, indent=4)
 
 def toiPathesLoad(match, stage):
-    d_update
+    d_update = dict()
     with open(backupStatus, "rt") as file:
-        d_update = json.load(file, object_pairs_hook=OrderedDict)
+        d_update = json.load(file)
     return d_update[match][stage]["path"]
 
 # analyzed data
 def analyzedWrite(match, stage, analyzed_data):
-    d_update
+    d_update = dict()
     with open(backupAnalyzed, "rt") as file:
-        d_update = json.load(file, object_pairs_hook=OrderedDict)
+        d_update = json.load(file)
 
     d_update[match][stage] = analyzed_data
     with open(backupAnalyzed, "w+") as file:
         json.dump(d_update, file, indent=4)
 
 def analyzedLoad(match, stage):
-    d_update
+    d_update = dict()
     with open(backupAnalyzed, "rt") as file:
-        d_update = json.load(file, object_pairs_hook=OrderedDict)
+        d_update = json.load(file)
     return d_update[match][stage]
 
 # similarity data
 def similarityWrite(match, stage, similarity_data):
-    d_update
+    d_update = dict()
     with open(backupSimilarity, "rt") as file:
-        d_update = json.load(file, object_pairs_hook=OrderedDict)
+        d_update = json.load(file)
 
     d_update[match][stage] = similarity_data
     with open(backupSimilarity, "w+") as file:
         json.dump(d_update, file, indent=4)
 
 def similarityLoad(match, stage):
-    d_update
+    d_update = dict()
     with open(backupSimilarity, "rt") as file:
-        d_update = json.load(file, object_pairs_hook=OrderedDict)
+        d_update = json.load(file)
     return d_update[match][stage]
 
 # answer cards
 def answerWrite(match, stage, answer_cards):
-    d_update
+    d_update = dict()
     with open(backupAnswer, "rt") as file:
-        d_update = json.load(file, object_pairs_hook=OrderedDict)
+        d_update = json.load(file)
 
     d_update[match][stage] = answer_cards
     with open(backupAnswer, "w+") as file:
         json.dump(d_update, file, indent=4)
 
 def answerLoad(match, stage):
-    d_update
+    d_update = dict()
     with open(backupAnswer, "rt") as file:
-        d_update = json.load(file, object_pairs_hook=OrderedDict)
+        d_update = json.load(file)
     return d_update[match][stage]
 
 if __name__ == '__main__':

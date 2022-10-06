@@ -150,6 +150,39 @@ def ClearChunkPathList():
     output_json = open('interaction.json', 'w')
     json.dump(interaction, output_json, indent=4)
 
+    # 追記
+def GETmatch():
+    # ConfigParserのインスタンス（特定の機能を持った変数）を取得
+    config = configparser.ConfigParser()
+    # json_op = open('interaction.json', 'r')
+    # interaction = json.load(json_op)
+    # config.iniを読み出し
+    # 引数削減のため，プログラム内でconfig.iniを参照
+    config.read("config.ini")
+    token = str(config["http_req"]["token"])
+    domain = str(config["http_req"]["domain"])
+    interval = float(config["http_req"]["interval_AutomaticGetting"])
+    # interval_AutomaticAnswerPost = float(config["http_req"]["interval_AutomaticAnswerPost"])
+    # isAutoGetFiles = config["http_req"].getboolean("isAutoGetFiles")
+    # isEnableAutomaticTransition = config["http_req"].getboolean("isEnableAutomaticTransition")
+
+    # POSTリクエスト
+    print(">",end='',flush=True)
+    response = requests.get(domain + "/match?token="+token)
+    # response = requests.post(request_url_chunk,headers={"procon-token": token})
+    #ステータスコードチェッカー
+    while(response.status_code != 200):
+        print(response.status_code)
+        # dos判定の回避
+        time.sleep(interval)
+        if(response.status_code == 400):print(".",end="",flush=True)
+        else:print("_",end='',flush=True)
+    
+    return response.json()
+
+
+    # 追記EOF
+
 # ------------------(http_req.py以外のプログラムから使用可能)-------------------->>>
 
 
