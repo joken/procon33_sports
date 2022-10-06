@@ -43,7 +43,9 @@ def main():
     if start <= 0:
         # request
         # req.ClearChunkPathList()
+        probrem_info = dict()
         toiPathes = req.AutomaticRequestChunksPath(3)
+        backup.infoWrite(match,stage,probrem_info)
         backup.toiPathesWrite(match,stage,toiPathes)
 
     if start <= 1:
