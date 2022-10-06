@@ -6,7 +6,7 @@ yomiPath = "/home/gisuperu/Desktop/procon33_sports/yomi.json"
 # def buckup(match, stage, analyzed_data, similarity_data):
 #     print()
 
-def comparison(match, stage, analyzed_data):
+def comparison(analyzed_data):
     yomi_data = dict()
     with open(yomiPath, "r") as f:
         yomi_data = json.load(f)
@@ -17,8 +17,9 @@ def comparison(match, stage, analyzed_data):
     for name in yomi_names:
         yomi_value = yomi_data[name]["data"]
         similarity = 1.0
-        for i in range(yomi_data[name]["size"]):
-            similarity *= analyzed_data[i]/yomi_value[i]
+        for key in analyzed_data.keys():
+            for i in range(yomi_data[name]["size"]):
+                similarity *= analyzed_data[key][i]/yomi_value[i]
 
         similarity_data[name] = similarity
     

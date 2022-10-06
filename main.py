@@ -52,19 +52,19 @@ def main():
         # analyze
         num = 0
         for toi in toiPathes:
-            analyzed_data["seg"+str(num)] = analyze.analyze(match, stage, num, toi)
+            analyzed_data["seg"+str(num)] = analyze.analyze(toi)
             num += 1
         backup.analyzedWrite(match,stage,analyzed_data)
 
     if start <= 2:
         # comparison
         for key in analyzed_data.keys():
-            similarity_data = comparison.comparison(match, stage, analyzed_data[key]) # ?add similarity_data
+            similarity_data = comparison.comparison(analyzed_data)
         backup.similarityWrite(match,stage,similarity_data)
 
     if start <= 3:
         # chooser
-        answer_cards = chooser.chooser(match, stage, similarity_data, answer_number)
+        answer_cards = chooser.chooser(similarity_data, answer_number)
         backup.answerWrite(match,stage,answer_cards)
 
     if start <= 4:

@@ -8,7 +8,7 @@
 
 
 
-def chooser(match, stage, similarity_data, ans_numbers):
+def chooser(similarity_data, ans_numbers):
     similarity_dict = dict()
     similarity_dict = similarity_data
 
