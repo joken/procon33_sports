@@ -1,4 +1,6 @@
+import chunk
 from code import interact
+import configparser
 import requests
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,19 +10,171 @@ from numpy import hamming
 import numpy as np
 import time
 import json
+import os
+
+# <<<---------------(http_req.py以外のプログラムから使用可能)--------------------
+
+def AutomaticRequestChunksPath(init_chunk):
+    init_chunk = int(init_chunk)
+    # ConfigParserのインスタンス（特定の機能を持った変数）を取得
+    config = configparser.ConfigParser()
+    json_op = open('interaction.json', 'r')
+    interaction = json.load(json_op)
+    # config.iniを読み出し
+    # 引数削減のため，プログラム内でconfig.iniを参照
+    config.read("config.ini")
+    token = str(config["http_req"]["token"])
+    domain = str(config["http_req"]["domain"])
+    interval = float(config["http_req"]["interval_AutomaticGetting"])
+    interval_AutomaticAnswerPost = float(config["http_req"]["interval_AutomaticAnswerPost"])
+    isAutoGetFiles = config["http_req"].getboolean("isAutoGetFiles")
+    isEnableAutomaticTransition = config["http_req"].getboolean("isEnableAutomaticTransition")
+    #分割データのリスト
+    chunk_list = []
+    #分割データのパスを記述したリスト
+    path_list = []
+    request_url_chunk = domain + "/problem/chunks?n=" + str(init_chunk)
+    # POSTリクエスト
+    print(">",end='',flush=True)
+    response = requests.post(request_url_chunk,headers={"procon-token": token})
+    #ステータスコードチェッカー
+    if(response.status_code != 200):
+        # dos判定の回避
+        time.sleep(interval)
+        if(response.status_code == 400):print(".",end="",flush=True)
+        else:print("_",end='',flush=True)
+        AutomaticRequestChunksPath(init_chunk)
+    else:
+        print("!")
+        # アクセスが成功した場合
+        print("chunks:")
+        # ファイル名の格納
+        for i in range(init_chunk):
+            chunk_list.append(str(response.json()['chunks'][i]))
+            print(response.json()['chunks'][i])
+        print()
+
+        #音声ファイルの自動取得 -> 有効でないとファイルのパスが返らない
+        if(isAutoGetFiles):
+            # for i in range(init_chunk):
+            #     print("> "+str(i)+": "+str(chunk_list[i]))
+            #     path_list.append("./wave_files/"+str(chunk_list[i]))
+            path_list = AutoGetFilesPath(init_chunk,chunk_list,token)
+            #自動回答POST遷移 -> 無効を推奨
+            if(isEnableAutomaticTransition):
+                AutomaticAnswerPost(domain,token,interval_AutomaticAnswerPost)
+        else:
+            interaction['chunk_list'] = chunk_list
+            output_json = open('interaction.json', 'w')
+            json.dump(interaction, output_json, indent=4)
+            for i in range(init_chunk):
+                path_list.append("./wave_files/"+str(chunk_list[i]))
+    return path_list
+
+def RequestAdditional():
+    config = configparser.ConfigParser()
+    config.read("config.ini")
+    token = str(config['http_req']['token'])
+    domain = str(config["http_req"]["domain"])
+    json_op = open('interaction.json', 'r')
+    interval = float(config["http_req"]["interval_AutomaticGetting"])
+    interaction = json.load(json_op)
+    chunk_path = ""
+    #分割データパス情報が残っているか(yes)
+    if(len(interaction['path_list']) != 0):
+        # interaction.jsonから分割データ情報を取り込む
+        chunk_path = interaction['path_list'][0]
+        # 1分割データのみリクエスト
+        print(">",end='',flush=True)
+        response = requests.get("https://procon33-practice.kosen.work/problem/chunks/" + chunk_path[13:] + "?token=" + token)
+        # リクエストループ
+        if(response.status_code != 200):
+            # dos判定の回避
+            time.sleep(interval)
+            if(response.status_code == 400):print(".",end="",flush=True)
+            else:
+                print("_",end='',flush=True)
+                ClearChunkPathList()
+            RequestAdditional()
+        else:
+            print("!")
+            os.makedirs("./wave_files", exist_ok=True)
+            del interaction['path_list'][0]
+            output_json = open('interaction.json', 'w')
+            json.dump(interaction, output_json, indent=4)
+            with open(chunk_path,"wb") as w_file:
+                w_file.write(response.content)
+            w_file.close()
+            print("status: " + str(response.status_code))
+            print("> Have added 1 chunk.")
+    #分割データパス情報がない場合
+    else:
+        print(">",end='',flush=True)
+        response = requests.get(domain + "/problem?token="+token)
+        # リクエストループ
+        if(response.status_code != 200):
+            # dos判定の回避
+            time.sleep(interval)
+            if(response.status_code == 400):print(".",end="",flush=True)
+            else:
+                print("_",end='',flush=True)
+                ClearChunkPathList()
+            RequestAdditional()
+        else:
+            print("!")
+            #全ての分割データをjsonへ格納する
+            interaction['path_list'] = AutomaticRequestChunksPath(int(response.json()['chunks']))
+
+            # interaction.jsonから分割データ情報を取り込む
+            chunk_path = interaction['path_list'][0]
+            os.makedirs("./wave_files", exist_ok=True)
+            # 1分割データのみリクエスト
+            response = requests.get("https://procon33-practice.kosen.work/problem/chunks/" + chunk_path[13:] + "?token=" + token)
+            # 配列から要素を削除
+            del interaction['path_list'][0]
+
+            output_json = open('interaction.json', 'w')
+            json.dump(interaction, output_json, indent=4)
+            with open(chunk_path,"wb") as w_file:
+                w_file.write(response.content)
+            w_file.close()
+            print("status: " + str(response.status_code))
+            print("> Have added 1 chunk.")
+    return chunk_path
+
+def ClearChunkPathList():
+    json_op = open('interaction.json', 'r')
+    interaction = json.load(json_op)
+    interaction['path_list'].clear()
+    output_json = open('interaction.json', 'w')
+    json.dump(interaction, output_json, indent=4)
+
+# ------------------(http_req.py以外のプログラムから使用可能)-------------------->>>
 
 
 def AutoGetFiles(n,chunk_list,token):
+    os.makedirs("./wave_files", exist_ok=True)
     for i in range(n):
-        file_name = "chunk" + str(i) + ".wav"
         response = requests.get("https://procon33-practice.kosen.work/problem/chunks/" + chunk_list[i] + "?token=" + token)
+        file_name = "./wave_files/" + chunk_list[i]
+        with open(file_name,'wb') as w_file:
+            w_file.write(response.content)
+        w_file.close()
+        print("status: " + str(response.status_code))
+    print()
+
+def AutoGetFilesPath(n,chunk_list,token):
+    os.makedirs("./wave_files", exist_ok=True)
+    path_list = []
+    for i in range(n):
+        response = requests.get("https://procon33-practice.kosen.work/problem/chunks/" + chunk_list[i] + "?token=" + token)
+        file_name = "./wave_files/" + chunk_list[i]
         with open(file_name,"wb") as w_file:
             w_file.write(response.content)
         w_file.close()
-        """        with open("file_test","w") as t:
-            t.write(str(vars(response)))"""
+        path_list.append("./wave_files/"+chunk_list[i])
         print("status: " + str(response.status_code))
-    print()
+    return path_list
 
 def status_code_check(response):
     if(response.status_code != 200):
@@ -151,5 +305,6 @@ def AnalyzeSpec(wave_file):
     librosa.display.specshow(spec_db, y_axis="log")
     plt.show()
 
-if(__name__ == "__main__"):
-    print("This source code is for the library of functions only!")
+# if(__name__ == "__main__"):
+#     print("This source code is for the library of functions only!")
+
