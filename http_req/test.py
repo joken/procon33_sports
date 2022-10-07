@@ -6,7 +6,6 @@ cmd = sys.argv[0]
 
 # $ python3 test.py r と入力した場合
 if(sys.argv[1] == 'r'):
-    print(funcs.GETmatch())
     a = funcs.AutomaticRequestChunksPath(sys.argv[2])
 # $ python3 test.py a と入力した場合
 elif(sys.argv[1] == 'a'):
@@ -14,6 +13,8 @@ elif(sys.argv[1] == 'a'):
 # $ python3 test.py c と入力した場合
 elif(sys.argv[1] == 'c'):
     a = funcs.ClearChunkPathList()
+elif(sys.argv[1] == 'm'):
+    a = funcs.POSTanswer()
 else:
     exit(1)
 

@@ -44,6 +44,18 @@ intervalは1以上が好ましいかも？
     引数　：void  
     戻り値：void  
 
+・`POSTanswer()`  
+    引数　：void  
+    戻り値：void  
+
+・`GETmatch()`  
+    引数　：void  
+    戻り値：試合情報(辞書型)  
+
+・`GETproblem()`  
+    引数　：void  
+    戻り値：問題情報(辞書型)  
+
 ## *usage*
 ・`AutomaticRequestChunksPath`  
 指定した分割数(init_chunk)の分割データ情報を取得するための関数．  
@@ -68,6 +80,15 @@ ex.)はじめに分割データが２つ欲しい場合：
 ・`ClearChunkPathList`  
 RequestAdditional関数に残っている過去に取得した分割データ情報をクリアするための関数．  
 問題データが変わる前に実行される必要がある（クリアを忘れると永遠に">.>."が続く可能性がある）．  
+
+・`POSTanswer`  
+interaction.json内の"answer"に格納されている絵札id配列を取り札としてPOST送信する関数． 
+
+・`GETmatch`  
+試合情報を辞書型として取得する関数． 
+
+・`GETproblem`  
+問題情報を辞書型として取得する関数． 
 
 # interaction.json
 ・`answer`  
