@@ -105,4 +105,6 @@ trueで回答POSTモード状態．
 AutomaticRequestChunksPath関数で取得した分割データ名を格納する配列．  
 
 ・`path_list`  
-分割データのパスを格納する配列で，RequestAdditional関数専用．  
+分割データのパスを格納する配列で，RequestAdditional関数専用．
+
+以上です．
