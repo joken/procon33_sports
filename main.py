@@ -36,10 +36,6 @@ def main():
         backup.statusWrite(match, Status)
     else:
         Status = backup.statusLoad(match)
-    toiPathes = backup.toiPathesLoad(match, stage)
-    analyzed_data = backup.analyzedLoad(match, stage)
-    similarity_data = backup.similarityLoad(match, stage)
-    answer_cards = backup.answerLoad(match, stage)
     print("GET/mutch finish")
 
     if start <= 0:
@@ -51,6 +47,8 @@ def main():
         backup.infoWrite(match,stage,probrem_info)
         backup.toiPathesWrite(match,stage,toiPathes)
         print("GET/probrem finish")
+    else:
+        toiPathes = backup.toiPathesLoad(match, stage)
 
     if start <= 1:
         # analyze
@@ -61,6 +59,9 @@ def main():
             num += 1
         backup.analyzedWrite(match,stage,analyzed_data)
         print("analyzing finish")
+    else:
+        analyzed_data = backup.analyzedLoad(match, stage)
+
 
     if start <= 2:
         # comparison
@@ -69,6 +70,9 @@ def main():
             similarity_data = comparison.comparison(analyzed_data)
         backup.similarityWrite(match,stage,similarity_data)
         print("conparing finish")
+    else:
+        similarity_data = backup.similarityLoad(match, stage)
+
 
     if start <= 3:
         # chooser
@@ -76,6 +80,9 @@ def main():
         answer_cards = chooser.chooser(similarity_data, answer_number)
         backup.answerWrite(match,stage,answer_cards)
         print("card choosing finish")
+    else:
+        answer_cards = backup.answerLoad(match, stage)
+
 
     if start <= 4:
         # send
