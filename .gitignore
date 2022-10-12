@@ -10,7 +10,7 @@ wave_files/
 developper/
 
 # 出力データのバックアップ
-buckup/**
+backup/**
 
 # 読みデータの解析後ファイル
 yomi.json

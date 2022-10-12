@@ -1,3 +1,4 @@
+import os
 import json
 from typing import OrderedDict
 
@@ -17,6 +18,32 @@ def cleanUP():
         json.dump(dict({}), file, indent=4)
     with open(backupAnswer, "w") as file:
         json.dump(dict({}), file, indent=4)
+
+def testInit():
+    question = dict({
+        "test1" : {
+            "status" : {
+                "problems": 1,
+                "bonus_factor": [1.0],
+                "penalty": 1
+            },
+            "1" : {
+                "info" : {
+                    "id": "sample_Q_E01",
+                    "chunks": 2,
+                    "starts_at": 1655302266,
+                    "time_limit": 1000,
+                    "data": 3
+                },
+                "path" : [
+                    "./origin_data/sample_Q_202205/sample_Q_E01/problem1.wav",
+                    "./origin_data/sample_Q_202205/sample_Q_E01/problem2.wav"
+                ]
+            }
+        }
+    })
+    with open(backupStatus, "w+") as file:
+        json.dump(question, file, indent=4)
 
 
 # Status
@@ -116,4 +143,6 @@ def answerLoad(match, stage):
     return d_update[match][stage]
 
 if __name__ == '__main__':
+    os.makedirs("./wave_files", exist_ok=True)
     cleanUP()
+    testInit()
