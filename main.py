@@ -12,7 +12,7 @@ import backup
 parser = argparse.ArgumentParser(description='解答用プログラム')
 parser.add_argument('match', help='試合番号')
 parser.add_argument('stage', help='問題番号')
-parser.add_argument('-j', '--jump', default=0, help='プロセス開始位置')
+parser.add_argument('-j', '--jump', default=0, type=int, help='プロセス開始位置')
 parser.add_argument('-s', '--start', action='store_true', help='GETで問題情報を取得')
 
 
@@ -30,6 +30,12 @@ answer_number = 0
 
 
 def main():
+    Status = dict()
+    problem_info = dict()
+    analyzed_data = dict()
+    similarity_data = dict()
+    answer_cards = dict()
+
     print("Try GET/mutch")
     if isbegin:
         Status = req.GETmatch()
@@ -38,7 +44,7 @@ def main():
         Status = backup.statusLoad(match)
     print("GET/mutch finish")
 
-    if start <= 0:
+    if int(start) <= 0:
         # request
         print("Try GET/probrem")
         # req.ClearChunkPathList()
@@ -51,7 +57,7 @@ def main():
         problem_info = backup.infoLoad(match, stage)
         toiPathes = backup.toiPathesLoad(match, stage)
 
-    if start <= 1:
+    if int(start) <= 1:
         # analyze
         print("Try analyzing")
         num = 0
@@ -64,7 +70,7 @@ def main():
         analyzed_data = backup.analyzedLoad(match, stage)
 
 
-    if start <= 2:
+    if int(start) <= 2:
         # comparison
         print("Try conparing")
         for key in analyzed_data.keys():
@@ -75,7 +81,7 @@ def main():
         similarity_data = backup.similarityLoad(match, stage)
 
 
-    if start <= 3:
+    if int(start) <= 3:
         # chooser
         print("Try card choosing")
         answer_cards = chooser.chooser(similarity_data, answer_number)
@@ -85,7 +91,7 @@ def main():
         answer_cards = backup.answerLoad(match, stage)
 
 
-    if start <= 4:
+    if int(start) <= 4:
         # send
         print("Try POST")
         req.POSTanswer()

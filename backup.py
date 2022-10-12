@@ -51,13 +51,16 @@ def statusWrite(match, status):
     d_update = dict()
     with open(backupStatus, "rt") as file:
         d_update = json.load(file)
+    d_update.setdefault(match, {})
+    # d_update.update({match: {}})
+    # print(d_update)
 
     d_update[match]["status"] = status
     with open(backupStatus, "w+") as file:
         json.dump(d_update, file, indent=4)
 
 def statusLoad(match):
-    d_update
+    d_update = dict()
     with open(backupStatus, "rt") as file:
         d_update = json.load(file)
     return d_update[match]["status"]
@@ -67,6 +70,10 @@ def infoWrite(match, stage, probrem_info):
     d_update = dict()
     with open(backupStatus, "rt") as file:
         d_update = json.load(file)
+    d_update.setdefault(match, {})
+    d_update[match].setdefault(stage, {})
+    # d_update.update({match: {stage: {}}})
+    # print(d_update)
 
     d_update[match][stage]["info"]= probrem_info
     with open(backupStatus, "w+") as file:
@@ -83,6 +90,10 @@ def toiPathesWrite(match, stage, toiPathes):
     d_update = dict()
     with open(backupStatus, "rt") as file:
         d_update = json.load(file)
+    d_update.setdefault(match, {})
+    d_update[match].setdefault(stage, {})
+    # d_update.update({match: {stage: {}}})
+    # print(d_update)
 
     d_update[match][stage]["path"]= toiPathes
     with open(backupStatus, "w+") as file:
@@ -99,6 +110,10 @@ def analyzedWrite(match, stage, analyzed_data):
     d_update = dict()
     with open(backupAnalyzed, "rt") as file:
         d_update = json.load(file)
+    d_update.setdefault(match, {})
+    d_update[match].setdefault(stage, {})
+    # d_update.update({match: {stage: {}}})
+    # print(d_update)
 
     d_update[match][stage] = analyzed_data
     with open(backupAnalyzed, "w+") as file:
@@ -115,6 +130,10 @@ def similarityWrite(match, stage, similarity_data):
     d_update = dict()
     with open(backupSimilarity, "rt") as file:
         d_update = json.load(file)
+    d_update.setdefault(match, {})
+    d_update[match].setdefault(stage, {})
+    # d_update.update({match: {stage: {}}})
+    # print(d_update)
 
     d_update[match][stage] = similarity_data
     with open(backupSimilarity, "w+") as file:
@@ -131,6 +150,10 @@ def answerWrite(match, stage, answer_cards):
     d_update = dict()
     with open(backupAnswer, "rt") as file:
         d_update = json.load(file)
+    d_update.setdefault(match, {})
+    d_update[match].setdefault(stage, {})
+    # d_update.update({match: {stage: {}}})
+    # print(d_update)
 
     d_update[match][stage] = answer_cards
     with open(backupAnswer, "w+") as file:
