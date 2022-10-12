@@ -143,6 +143,6 @@ def answerLoad(match, stage):
     return d_update[match][stage]
 
 if __name__ == '__main__':
-    os.makedirs("./wave_files", exist_ok=True)
+    os.makedirs("./backup", exist_ok=True)
     cleanUP()
     testInit()
