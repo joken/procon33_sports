@@ -42,12 +42,13 @@ def main():
         # request
         print("Try GET/probrem")
         # req.ClearChunkPathList()
-        probrem_info = dict()
-        toiPathes = req.AutomaticRequestChunksPath(3)
-        backup.infoWrite(match,stage,probrem_info)
+        problem_info = req.GETproblem()
+        toiPathes = req.AutomaticRequestChunksPath(int(problem_info["chunks"]))
+        backup.infoWrite(match,stage,problem_info)
         backup.toiPathesWrite(match,stage,toiPathes)
         print("GET/probrem finish")
     else:
+        problem_info = backup.infoLoad(match, stage)
         toiPathes = backup.toiPathesLoad(match, stage)
 
     if start <= 1:
@@ -87,6 +88,7 @@ def main():
     if start <= 4:
         # send
         print("Try POST")
+        req.POSTanswer()
         print("POST finish")
 
 if __name__ == '__main__':
