@@ -1,5 +1,6 @@
 import argparse
 import os
+import json
 
 from numpy import mat
 # from analyze import cepstrum
@@ -26,7 +27,6 @@ stage = args.stage
 start = args.jump
 isbegin = args.start
 
-answer_number = 0
 
 
 def main():
@@ -35,6 +35,7 @@ def main():
     analyzed_data = dict()
     similarity_data = dict()
     answer_cards = dict()
+    answer_number = 0
 
     print("Try GET/mutch")
     if isbegin:
@@ -50,12 +51,15 @@ def main():
         # req.ClearChunkPathList()
         problem_info = req.GETproblem()
         toiPathes = req.AutomaticRequestChunksPath(int(problem_info["chunks"]))
+        answer_number = int(problem_info["data"])
         backup.infoWrite(match,stage,problem_info)
         backup.toiPathesWrite(match,stage,toiPathes)
         print("GET/probrem finish")
     else:
         problem_info = backup.infoLoad(match, stage)
         toiPathes = backup.toiPathesLoad(match, stage)
+        answer_number = int(problem_info["data"])
+
 
     if int(start) <= 1:
         # analyze
@@ -83,8 +87,10 @@ def main():
 
     if int(start) <= 3:
         # chooser
+        answer_number = 20 # teststatus
         print("Try card choosing")
         answer_cards = chooser.chooser(similarity_data, answer_number)
+        print(answer_cards)
         backup.answerWrite(match,stage,answer_cards)
         print("card choosing finish")
     else:
@@ -94,7 +100,15 @@ def main():
     if int(start) <= 4:
         # send
         print("Try POST")
-        req.POSTanswer()
+        # answer = set([i[1:] for i in answer_cards[:3]])
+        # post_data = dict()
+        # with open("./interaction.json", "rt") as file:
+        #     post_data = json.load(file)
+        # post_data["answer"] = list(answer)
+        # print(post_data)
+        # with open("./interaction.json", "w+") as file:
+        #     json.dump(post_data, file, indent=4)
+        # req.POSTanswer()
         print("POST finish")
 
 if __name__ == '__main__':

@@ -20,7 +20,7 @@ def comparison(analyzed_data):
         similarity = 1.0
         for key in analyzed_data.keys():
             for i in range(min(yomi_data[name]["size"], len(analyzed_data[key]))):
-                similarity *= analyzed_data[key][i]/yomi_value[i]
+                similarity += analyzed_data[key][i]-yomi_value[i]
 
         similarity_data[name] = similarity
     
