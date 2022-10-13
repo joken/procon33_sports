@@ -87,7 +87,7 @@ def main():
 
     if int(start) <= 3:
         # chooser
-        answer_number = 20 # teststatus
+        # answer_number = 20 # teststatus
         print("Try card choosing")
         answer_cards = chooser.chooser(similarity_data, answer_number)
         print(answer_cards)
@@ -100,15 +100,15 @@ def main():
     if int(start) <= 4:
         # send
         print("Try POST")
-        # answer = set([i[1:] for i in answer_cards[:3]])
-        # post_data = dict()
-        # with open("./interaction.json", "rt") as file:
-        #     post_data = json.load(file)
-        # post_data["answer"] = list(answer)
-        # print(post_data)
-        # with open("./interaction.json", "w+") as file:
-        #     json.dump(post_data, file, indent=4)
-        # req.POSTanswer()
+        answer = set([i[1:] for i in answer_cards[:3]])
+        post_data = dict()
+        with open("./interaction.json", "rt") as file:
+            post_data = json.load(file)
+        post_data["answer"] = list(answer)
+        print(post_data)
+        with open("./interaction.json", "w+") as file:
+            json.dump(post_data, file, indent=4)
+        req.POSTanswer()
         print("POST finish")
 
 if __name__ == '__main__':
