@@ -1,4 +1,5 @@
 import json
+import numpy as np
 from analyze import analyze
 
 def main():
@@ -48,14 +49,13 @@ def main():
                 averageJP[i] += yomi_data[data]["data"][i]
                 numJP += 1
                 num += 1
-        print("num: "+str(num))
-        print("numJP: "+str(numJP))
-        print("numEN: "+str(numEN))
+        # print("num: "+str(num))
+        # print("numJP: "+str(numJP))
+        # print("numEN: "+str(numEN))
         average[i] /= num
         averageJP[i] /= numJP
         averageEN[i] /= numEN
 
-    # for i in range(yomi_data["J01"]["size"]):
         sd.append(0)
         sdJP.append(0)
         sdEN.append(0)
@@ -69,8 +69,12 @@ def main():
         sd[i] /= num
         sdJP[i] /= numJP
         sdEN[i] /= numEN
-
     
+    np.sqrt(sd)
+    np.sqrt(sdJP)
+    np.sqrt(sdEN)
+
+
     with open(outjson, "w+") as file:
         json.dump(yomi_data, file, indent=4)
 

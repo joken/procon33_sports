@@ -3,14 +3,19 @@ import numpy as np
 
 yomiPath = "/home/gisuperu/Desktop/procon33_sports/yomi.json"
 # yomiPath= "./yomi.json"
+maskPath = "/home/gisuperu/Desktop/procon33_sports/mask.json"
+# maskPath = "./mask.json"
 
 # def buckup(match, stage, analyzed_data, similarity_data):
 #     print()
 
 def comparison(analyzed_data):
     yomi_data = dict()
+    mask_data = dict()
     with open(yomiPath, "r") as f:
         yomi_data = json.load(f)
+    with open(maskPath, "r") as f:
+        mask_data = json.load(f)
 
     yomi_names = yomi_data.keys()
 
