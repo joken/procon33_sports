@@ -32,7 +32,9 @@ def cepstrum(data, samplerate):
     spec_db_amp = norm(spec_db, 2e-5)                     # 音声スペクトルの振幅成分を計算
     ceps_db_low_amp = norm(ceps_db_low, 2e-5)             # ローパスリフター後のスペクトル包絡の振幅成分を計算
 
-    return tuple(spec_db_amp)
+    out = tuple(spec_db_amp)
+    # print(type(ceps_db_low))
+    return out
 
 def cepstrum_alt(data, samplerate):
     spectrum_amp_log = np.log(np.abs(np.fft.fft(data, len(data))))
@@ -65,7 +67,7 @@ def cepstrum_alt2(data, samplerate):
 def analyze(wavfile):
     data, samplerate = sf.read(wavfile)
 
-    analyzed_data = cepstrum_alt2(data, samplerate)
+    analyzed_data = cepstrum(data, samplerate)
     
     # buckup(match, stage, analyzed_data)
     return analyzed_data

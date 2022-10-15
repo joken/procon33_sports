@@ -51,7 +51,7 @@ def main():
         # req.ClearChunkPathList()
         problem_info = req.GETproblem()
         backup.infoWrite(match,stage,problem_info)
-        toiPathes = req.AutomaticRequestChunksPath(3)
+        toiPathes = req.AutomaticRequestChunksPath(2)
         # toiPathes = req.AutomaticRequestChunksPath(max(int(problem_info["chunks"]/2, 2)))
         answer_number = int(problem_info["data"])
         backup.toiPathesWrite(match,stage,toiPathes)
@@ -87,7 +87,7 @@ def main():
 
     if int(start) <= 3:
         # chooser
-        # answer_number = 20 # teststatus
+        # answer_number = 6 # teststatus
         print("Try card choosing")
         answer_cards = chooser.chooser(similarity_data, answer_number)
         print(answer_cards)
@@ -100,7 +100,7 @@ def main():
     if int(start) <= 4:
         # send
         print("Try POST")
-        answer = set([i[1:] for i in answer_cards[:3]])
+        answer = set([i[1:] for i in answer_cards[:int(answer_number)]])
         post_data = dict()
         with open("./interaction.json", "rt") as file:
             post_data = json.load(file)
