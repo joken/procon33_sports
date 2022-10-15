@@ -50,7 +50,7 @@ def main():
         print("Try GET/probrem")
         # req.ClearChunkPathList()
         problem_info = req.GETproblem()
-        toiPathes = req.AutomaticRequestChunksPath(int(problem_info["chunks"]))
+        toiPathes = req.AutomaticRequestChunksPath(max(int(problem_info["chunks"]/2, 2)))
         answer_number = int(problem_info["data"])
         backup.infoWrite(match,stage,problem_info)
         backup.toiPathesWrite(match,stage,toiPathes)
@@ -76,11 +76,10 @@ def main():
 
     if int(start) <= 2:
         # comparison
-        print("Try conparing")
-        for key in analyzed_data.keys():
-            similarity_data = comparison.comparison(analyzed_data)
+        print("Try comparing")
+        similarity_data = comparison.comparison(analyzed_data)
         backup.similarityWrite(match,stage,similarity_data)
-        print("conparing finish")
+        print("comparing finish")
     else:
         similarity_data = backup.similarityLoad(match, stage)
 
