@@ -96,11 +96,13 @@ def RequestAdditional():
         # interaction.jsonから分割データ情報を取り込む
         chunk_path = interaction['path_list'][0]
 
-        response = requests.get("https://procon33-practice.kosen.work/problem/chunks/" + chunk_path[13:] + "?token=" + token)
+        response = requests.get(domain + "/problem/chunks/" + chunk_path[13:] + "?token="+token)
+        # response = requests.get("https://procon33-practice.kosen.work/problem/chunks/" + chunk_path[13:] + "?token=" + token)
         # リクエストループ
         while(response.status_code != 200):
             print(">",end='',flush=True)
-            response = requests.get("https://procon33-practice.kosen.work/problem/chunks/" + chunk_path[13:] + "?token=" + token)
+            response = requests.get(domain + "/problem/chunks/" + chunk_path[13:] + "?token="+token)
+            # response = requests.get("https://procon33-practice.kosen.work/problem/chunks/" + chunk_path[13:] + "?token=" + token)
             # dos判定の回避
             time.sleep(interval)
             if(response.status_code == 200):print("!",end="",flush=True)
@@ -168,7 +170,8 @@ def RequestAdditional():
         chunk_path = interaction['path_list'][0]
         os.makedirs("./wave_files", exist_ok=True)
         # 1分割データのみリクエスト
-        response = requests.get("https://procon33-practice.kosen.work/problem/chunks/" + chunk_path[13:] + "?token=" + token)
+        response = requests.get(domain + "/problem/chunks/" + chunk_path[13:] + "?token="+token)
+        # response = requests.get("https://procon33-practice.kosen.work/problem/chunks/" + chunk_path[13:] + "?token=" + token)
         # 配列から要素を削除
         del interaction['path_list'][0]
 
@@ -287,9 +290,14 @@ def GETproblem():
 
 
 def AutoGetFiles(n,chunk_list,token):
+    config = configparser.ConfigParser()
+    config.read("config.ini")
+    token = str(config['http_req']['token'])
+    domain = str(config["http_req"]["domain"])
     os.makedirs("./wave_files", exist_ok=True)
     for i in range(n):
-        response = requests.get("https://procon33-practice.kosen.work/problem/chunks/" + chunk_list[i] + "?token=" + token)
+        response = requests.get(domain + "/problem/chunks/" + chunk_list[i] + "?token="+token)
+        # response = requests.get("https://procon33-practice.kosen.work/problem/chunks/" + chunk_list[i] + "?token=" + token)
         file_name = "./wave_files/" + chunk_list[i]
         with open(file_name,'wb') as w_file:
             w_file.write(response.content)
@@ -298,10 +306,15 @@ def AutoGetFiles(n,chunk_list,token):
     print()
 
 def AutoGetFilesPath(n,chunk_list,token):
+    config = configparser.ConfigParser()
+    config.read("config.ini")
+    token = str(config['http_req']['token'])
+    domain = str(config["http_req"]["domain"])
     os.makedirs("./wave_files", exist_ok=True)
     path_list = []
     for i in range(n):
-        response = requests.get("https://procon33-practice.kosen.work/problem/chunks/" + chunk_list[i] + "?token=" + token)
+        response = requests.get(domain + "/problem/chunks/" + chunk_list[i] + "?token="+token)
+        # response = requests.get("https://procon33-practice.kosen.work/problem/chunks/" + chunk_list[i] + "?token=" + token)
         file_name = "./wave_files/" + chunk_list[i]
         with open(file_name,"wb") as w_file:
             w_file.write(response.content)

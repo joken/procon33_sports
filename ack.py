@@ -37,4 +37,4 @@ def GETtest():
     return response.json()
 
 if __name__ == '__main__':
-    print(GETtest())
+    print(dict(GETtest()))
