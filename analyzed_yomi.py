@@ -74,6 +74,10 @@ def main():
     np.sqrt(sdJP)
     np.sqrt(sdEN)
 
+    for i in range(len(sd)):
+        if sd[i] < 700:
+            sd[i] = 0.00001
+
 
     with open(outjson, "w+") as file:
         json.dump(yomi_data, file, indent=4)

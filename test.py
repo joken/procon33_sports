@@ -89,7 +89,9 @@ def main():
         # chooser
         # answer_number = 6 # teststatus
         print("Try card choosing")
-        answer_cards = chooser.chooser(similarity_data, answer_number)
+        answer_cards = chooser.chooser(similarity_data, answer_number, match, stage)
+        # answer_cards = chooser.chooser(similarity_data, answer_number)
+        print(len(answer_cards))
         print(answer_cards)
         backup.answerWrite(match,stage,answer_cards)
         print("card choosing finish")

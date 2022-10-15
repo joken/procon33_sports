@@ -24,6 +24,7 @@ def cepstrum(data, samplerate):
     # ケプストラム分析
     spec = fftpack.fft(data)                              # 時間波形をフーリエ変換してスペクトルにする
     spec_db = db(spec, 2e-5)                              # スペクトルを対数(dB)にする(0dB=20[μPa])
+    
     ceps_db = np.real(fftpack.ifft(spec_db))              # 対数スペクトルを逆フーリエ変換してケプストラム波形を作る
     index = 50                                            # ローパスリフターのカットオフ指標
     ceps_db[index:len(ceps_db) - index] = 0               # ケプストラム波形の高次を0にする（ローパスリフター）
@@ -32,7 +33,7 @@ def cepstrum(data, samplerate):
     spec_db_amp = norm(spec_db, 2e-5)                     # 音声スペクトルの振幅成分を計算
     ceps_db_low_amp = norm(ceps_db_low, 2e-5)             # ローパスリフター後のスペクトル包絡の振幅成分を計算
 
-    out = tuple(spec_db_amp)
+    out = tuple(ceps_db_low_amp)
     # print(type(ceps_db_low))
     return out
 
