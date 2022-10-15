@@ -14,3 +14,4 @@ backup/**
 
 # 読みデータの解析後ファイル
 yomi.json
+mask.json
