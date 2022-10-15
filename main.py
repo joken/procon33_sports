@@ -51,7 +51,7 @@ def main():
         # req.ClearChunkPathList()
         problem_info = req.GETproblem()
         backup.infoWrite(match,stage,problem_info)
-        toiPathes = req.AutomaticRequestChunksPath(2)
+        toiPathes = req.AutomaticRequestChunksPath(1)
         # toiPathes = req.AutomaticRequestChunksPath(max(int(problem_info["chunks"]/2, 2)))
         answer_number = int(problem_info["data"])
         backup.toiPathesWrite(match,stage,toiPathes)
