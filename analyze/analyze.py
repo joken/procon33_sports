@@ -34,11 +34,38 @@ def cepstrum(data, samplerate):
 
     return tuple(spec_db_amp)
 
+def cepstrum_alt(data, samplerate):
+    spectrum_amp_log = np.log(np.abs(np.fft.fft(data, len(data))))
+    cep = np.fft.fft(spectrum_amp_log)
+    dims = 100
+    cep[dims:cep.shape[0]-dims]  =0
+    plt.plot(cep)
+    plt.savefig("./out.png")
+    plt.close()
+
+def cepstrum_alt2(data, samplerate):
+    n = len(data)
+    fscale = np.linspace(0, samplerate, n)
+    dft = np.fft.fft(data,n)
+
+    dft_abs = np.abs(dft)
+    logampDFT = 10*np.log10(dft_abs**2)
+
+    cps = np.real(np.fft.ifft(logampDFT))
+
+    cpsCoef = 100
+    cps[cpsCoef:len(cps) - cpsCoef] = 0
+    
+    dft_cps_low = np.real(np.fft.fft(cps, n))
+
+    return list(dft_cps_low)
+
+
 # main process
 def analyze(wavfile):
     data, samplerate = sf.read(wavfile)
 
-    analyzed_data = cepstrum(data, samplerate)
+    analyzed_data = cepstrum_alt2(data, samplerate)
     
     # buckup(match, stage, analyzed_data)
     return analyzed_data

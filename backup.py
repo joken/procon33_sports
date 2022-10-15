@@ -132,10 +132,15 @@ def similarityWrite(match, stage, similarity_data):
         d_update = json.load(file)
     d_update.setdefault(match, {})
     d_update[match].setdefault(stage, {})
+    d_update[match][stage].setdefault("dict", {})
+    d_update[match][stage].setdefault("soted", {})
     # d_update.update({match: {stage: {}}})
     # print(d_update)
 
-    d_update[match][stage] = similarity_data
+    similarity_data_alt = sorted(similarity_data.items(), key=lambda x : x[1])
+
+    d_update[match][stage]["dict"] = similarity_data
+    d_update[match][stage]["soted"] = similarity_data_alt
     with open(backupSimilarity, "w+") as file:
         json.dump(d_update, file, indent=4)
 
@@ -143,7 +148,7 @@ def similarityLoad(match, stage):
     d_update = dict()
     with open(backupSimilarity, "rt") as file:
         d_update = json.load(file)
-    return d_update[match][stage]
+    return d_update[match][stage]["dict"]
 
 # answer cards
 def answerWrite(match, stage, answer_cards):
